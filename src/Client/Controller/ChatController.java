@@ -4,6 +4,7 @@ import Client.Model.ClientModel;
 import Client.View.ChatView;
 import Client.View.ConfigView;
 import Client.View.LoginView;
+import javafx.application.Platform;
 
 public class ChatController {
     private ChatView chatView;
@@ -21,6 +22,13 @@ public class ChatController {
             model.connectToServer();
             if (model.isConnected()) {
                 configView.updateStatusConnect(true);
+            }
+        });
+
+        configView.getBtnNext().setOnAction(e-> {
+            if (model.isConnected()) {
+                configView.stop();
+                loginView.start();
             }
         });
 
@@ -43,11 +51,21 @@ public class ChatController {
         });
 
         loginView.getBtnCreateAcc().setOnAction( e -> {
-            loginView.updateStatusLogin("Account created");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    model.sendMessage(model.createSendableString("CreateLogin", loginView.getInputUserName().getText(), loginView.getInputPassword().getText()));
+                }
+            });
         });
 
         loginView.getBtnLogin().setOnAction( e -> {
-            loginView.updateStatusLogin("Login successful");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    model.sendMessage(model.createSendableString("Login", loginView.getInputUserName().getText(), loginView.getInputPassword().getText()));
+                }
+            });
         });
     }
 }

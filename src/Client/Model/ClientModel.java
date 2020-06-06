@@ -1,12 +1,30 @@
 package Client.Model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ClientModel {
     private String ipAdress = null;
     private int port = 0;
-    Socket socket = null;
+    private Socket socket = null;
+
+
+    // IO-Elements
+    private OutputStreamWriter socketOut;
+    private BufferedReader socketIn;
+
+    // Unique Token that needs to be sent with every message (Server identifies Client through Token)
+    private String uniqueToken ="";
+    // Separated Strings from message
+    private String[] messageParts = new String[4];
+
+    private String userName;
+    private String password;
+
     private boolean connected = false;
 
     public void connectToServer() {
@@ -19,6 +37,69 @@ public class ClientModel {
                 System.out.println("Connection to server has failed");
             }
         }
+
+        try {
+            socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            socketOut = new OutputStreamWriter(socket.getOutputStream());
+            System.out.println("IO-Streams successfully created");
+            // Create thread to read incoming messages
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ListenerThread lt = new ListenerThread();
+        lt.start();
+
+        /* finally {
+            if (socket != null) try {
+                socket.close();
+            } catch (IOException e) {
+                // we don't care
+            }
+
+        }
+        */
+    }
+
+    private String[] separateMessage(String msg) {
+        String[] strings = msg.split("|");
+        if (messageParts[3] != null) {
+            checkForUniqueToken();
+        }
+        return strings;
+    }
+
+    private void checkForUniqueToken() {
+        if (messageParts[0].equals("Result") && messageParts[1].equals("CreateLogin") && messageParts[2].equals("false")) {
+            uniqueToken = messageParts[3];
+        }
+    }
+
+
+
+    public void sendMessage(String message) {
+        try {
+            socketOut.write(message + "\n");
+            socketOut.flush();
+            System.out.println(message);
+        } catch (IOException e) {
+            System.out.println("Exception writing to server: "+message);
+        }
+    }
+
+    public String createSendableString(String s) {
+        return s;
+    }
+
+    public String createSendableString(String type, String userName, String password) {
+        String sendable = type +"|"+userName+"|"+password;
+        return sendable;
+    }
+
+    public String createSendableString(String type, String chatRoom, boolean isPublic) {
+        String sendable = type +"|"+uniqueToken+"|"+chatRoom+"|"+isPublic;
+        return sendable;
     }
 
     public boolean validateIpAddress(String ipAddress) {
@@ -84,5 +165,28 @@ public class ClientModel {
 
     public boolean isConnected() {
         return connected;
+    }
+
+    private class ListenerThread extends Thread {
+        volatile String message = "";
+
+        public ListenerThread() {
+            super("ListenerThread");
+        }
+
+        @Override
+        public void run() {
+
+            while (true) {
+                Socket s = null;
+                try {
+                    message = socketIn.readLine();
+                    System.out.println(message);
+                    messageParts = separateMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

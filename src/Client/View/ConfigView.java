@@ -17,6 +17,7 @@ public class ConfigView {
     private VBox root;
     private HBox boxIP;
     private HBox boxPort;
+    private HBox boxConnect;
 
     private Label lblWelcome;
     private Label lblInstruction;
@@ -29,6 +30,7 @@ public class ConfigView {
     private Button btnEnterIP;
     private Button btnEnterPort;
     private Button btnConnect;
+    private Button btnNext;
 
 
     public ConfigView (Stage stage, ClientModel model) {
@@ -40,14 +42,14 @@ public class ConfigView {
         lblWelcome = new Label("Welcome to the Chat");
         lblInstruction = new Label("Enter and submit IP-Adress, then the port");
 
-        inputIPAdress = new TextField("Enter IP-Adress here...");
+        inputIPAdress = new TextField("147.86.8.31");
         btnEnterIP = new Button("Submit");
         boxIP = new HBox(5);
         boxIP.getChildren().addAll(inputIPAdress, btnEnterIP);
 
         lblStatusIpAdress = new Label("IP-Adress not submitted yet");
 
-        inputPort = new TextField("Enter Port here...(50001)");
+        inputPort = new TextField("50001");
         btnEnterPort = new Button("Submit");
         boxPort = new HBox(5);
         boxPort.getChildren().addAll(inputPort, btnEnterPort);
@@ -55,10 +57,12 @@ public class ConfigView {
         lblStatusPort = new Label("Not connected to server yet");
 
         btnConnect = new Button("Connect");
-
+        btnNext = new Button("Next");
+        boxConnect = new HBox(5);
+        boxConnect.getChildren().addAll(btnConnect, btnNext);
         lblStatusConnect = new Label("Not connected yet");
 
-        root.getChildren().addAll(lblWelcome, lblInstruction, boxIP, lblStatusIpAdress, boxPort, lblStatusPort, btnConnect, lblStatusConnect);
+        root.getChildren().addAll(lblWelcome, lblInstruction, boxIP, lblStatusIpAdress, boxPort, lblStatusPort, boxConnect, lblStatusConnect);
         root.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(root);
@@ -125,5 +129,9 @@ public class ConfigView {
 
     public Button getBtnConnect() {
         return btnConnect;
+    }
+
+    public Button getBtnNext() {
+        return btnNext;
     }
 }
