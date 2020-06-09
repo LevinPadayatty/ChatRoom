@@ -1,5 +1,7 @@
 package Client.Model;
 
+import javafx.beans.property.SimpleStringProperty;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +23,10 @@ public class ClientModel {
     private String uniqueToken ="";
     // Separated Strings from message
     private String[] messageParts = new String[4];
+    private boolean actionSuccessful;
+    private String messageType;
+
+    private SimpleStringProperty messageProperty = new SimpleStringProperty();
 
     private String userName;
     private String password;
@@ -63,8 +69,8 @@ public class ClientModel {
     }
 
     private String[] separateMessage(String msg) {
-        String[] strings = msg.split("|");
-        if (messageParts[3] != null) {
+        String[] strings = msg.split("\\|");
+        if (uniqueToken == null && messageParts[3] != null) {
             checkForUniqueToken();
         }
         return strings;
@@ -76,7 +82,10 @@ public class ClientModel {
         }
     }
 
-
+    public void assignMessageParts() {
+        messageType = messageParts[1];
+        actionSuccessful = Boolean.parseBoolean(messageParts[2]);
+    }
 
     public void sendMessage(String message) {
         try {
@@ -167,6 +176,22 @@ public class ClientModel {
         return connected;
     }
 
+    public String getUniqueToken() {
+        return uniqueToken;
+    }
+
+    public boolean isActionSuccessful() {
+        return actionSuccessful;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public SimpleStringProperty getMessageProperty() {
+        return messageProperty;
+    }
+
     private class ListenerThread extends Thread {
         volatile String message = "";
 
@@ -183,6 +208,8 @@ public class ClientModel {
                     message = socketIn.readLine();
                     System.out.println(message);
                     messageParts = separateMessage(message);
+                    assignMessageParts();
+                    messageProperty.set(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

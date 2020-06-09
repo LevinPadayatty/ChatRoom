@@ -67,5 +67,42 @@ public class ChatController {
                 }
             });
         });
+
+        loginView.getBtnNext().setOnAction( e -> {
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    loginView.stop();
+                    chatView.start();
+                }
+            });
+        });
+
+        model.getMessageProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    switch (model.getMessageType()) {
+                        case "CreateLogin":
+                            if (model.isActionSuccessful()) {
+                                loginView.updateStatusLogin("Account successfully created - Go on with Login");
+                            } else {
+                                loginView.updateStatusLogin("Oops, the account couldn't be created - try another username and password");
+                            }
+                            break;
+                        case "Login":
+                            if (model.isActionSuccessful()) {
+                                loginView.updateStatusLogin("Login Successful - Click <\"Next\"> to go to Chatroom");
+                            } else {
+                                loginView.updateStatusLogin("Oops, this didn¨t work! Check the entered credentials or try to create an account first");
+                            }
+                            break;
+                    }
+                }
+            });
+
+        });
     }
 }

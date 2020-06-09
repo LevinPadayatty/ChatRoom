@@ -23,6 +23,7 @@ public class LoginView {
 
     private Button btnCreateAcc;
     private Button btnLogin;
+    private Button btnNext;
 
     public LoginView (Stage stage, ClientModel model) {
         this.stage = stage;
@@ -34,6 +35,7 @@ public class LoginView {
 
         btnCreateAcc = new Button("Create Account");
         btnLogin = new Button("Log in");
+        btnNext = new Button ("Next");
         boxButtons = new HBox(5);
         boxButtons.getChildren().addAll(btnCreateAcc, btnLogin);
 
@@ -73,5 +75,9 @@ public class LoginView {
 
     public Button getBtnLogin() {
         return btnLogin;
+    }
+
+    public Button getBtnNext() {
+        return btnNext;
     }
 }

@@ -6,8 +6,8 @@ import Client.View.ChatView;
 import Client.View.ConfigView;
 import Client.View.LoginView;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
+
 
 public class ChatRoomClient extends Application {
 
