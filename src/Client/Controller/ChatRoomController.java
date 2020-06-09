@@ -6,13 +6,13 @@ import Client.View.ConfigView;
 import Client.View.LoginView;
 import javafx.application.Platform;
 
-public class ChatController {
+public class ChatRoomController {
     private ChatView chatView;
     private ClientModel model;
     private ConfigView configView;
     private LoginView loginView;
 
-    public ChatController(ClientModel model, ChatView chatView, ConfigView configView, LoginView loginView) {
+    public ChatRoomController(ClientModel model, ChatView chatView, ConfigView configView, LoginView loginView) {
         this.model = model;
         this.chatView = chatView;
         this.configView = configView;

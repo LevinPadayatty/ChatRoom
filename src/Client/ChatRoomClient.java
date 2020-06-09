@@ -1,6 +1,6 @@
 package Client;
 
-import Client.Controller.ChatController;
+import Client.Controller.ChatRoomController;
 import Client.Model.ClientModel;
 import Client.View.ChatView;
 import Client.View.ConfigView;
@@ -15,7 +15,7 @@ public class ChatRoomClient extends Application {
     private ChatView chatView;
     private ConfigView configView;
     private LoginView loginView;
-    private ChatController controller;
+    private ChatRoomController controller;
 
     public static void main(String[] args) {
         launch(args);
@@ -35,7 +35,7 @@ public class ChatRoomClient extends Application {
 
 
 
-        this.controller = new ChatController(model, chatView, configView, loginView);
+        this.controller = new ChatRoomController(model, chatView, configView, loginView);
 
         configView.start();
     }

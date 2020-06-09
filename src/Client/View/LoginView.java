@@ -37,7 +37,7 @@ public class LoginView {
         btnLogin = new Button("Log in");
         btnNext = new Button ("Next");
         boxButtons = new HBox(5);
-        boxButtons.getChildren().addAll(btnCreateAcc, btnLogin);
+        boxButtons.getChildren().addAll(btnCreateAcc, btnLogin,btnNext);
 
         lblStatus = new Label("Create an account first");
 

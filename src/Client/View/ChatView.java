@@ -54,15 +54,9 @@ public class ChatView {
         paneConversationOverview.setPrefWidth(boxChatControls.getPrefWidth());
 
 
-
-
-
-
-
     }
 
     public void start() {
         stage.show();
     }
-
 }
